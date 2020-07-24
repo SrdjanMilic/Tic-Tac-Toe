@@ -1,17 +1,21 @@
 <template>
-  <div class="home">
-    <CreatePlayer />
+  <div class="game">
+    <PlayGame />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import CreatePlayer from '@/components/CreatePlayer.vue';
+import PlayGame from '@/components/PlayGame.vue';
 
 export default {
   name: 'Home',
   components: {
-    CreatePlayer
+    PlayGame
   }
 };
 </script>
+
+<style scoped>
+
+</style>
