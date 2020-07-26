@@ -8,28 +8,37 @@
       <br>
       <input type="submit" value='Register' />
     </form>
+    <div>{{ this.$store.state.player }}</div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'CreatePlayer',
+
   data () {
     return {
-      apikey: 'bc71bc64-0698-4512-aa4e-33196cc6a3cf',
       name: ''
     };
   },
+
+  computed: {
+    ...mapState(['player'])
+  },
+
   methods: {
+    ...mapActions(['setPlayer']),
     newPlayer () {
       axios
-        .post('http://178.128.206.150:7000/player', {
+        .post(`${this.server}/player`, {
           name: this.name,
-          apikey: this.apikey
+          apikey: this.apiKey
         })
         .then(response => {
+          this.setPlayer(response.data);
           console.log(response.data);
         })
         .catch(err => {
