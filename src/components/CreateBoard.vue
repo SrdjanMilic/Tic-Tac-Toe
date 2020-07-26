@@ -10,19 +10,15 @@ import axios from 'axios';
 
 export default {
   name: 'CreateBoards',
-  data () {
-    return {
-      apikey: 'bc71bc64-0698-4512-aa4e-33196cc6a3cf'
-    };
-  },
 
   methods: {
     createBoard () {
       axios
-        .post('http://178.128.206.150:7000/create_board', {
-          apikey: this.apikey
+        .post(`${this.server}/create_board`, {
+          apikey: this.apiKey
         })
         .then(response => {
+          this.setBoard(response.data);
           console.log(response.data);
         })
         .catch(err => {
