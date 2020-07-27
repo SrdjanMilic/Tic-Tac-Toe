@@ -11,7 +11,7 @@ const store = new Vuex.Store({
 
   state: {
     server: 'http://178.128.206.150:7000',
-    apiKey: null,
+    apiKey: 'e6266ac3-8a38-4f06-a49d-6a189e84648c', // set to null for dynamic creation
     player: [{ id: null, name: null }],
     boards: [],
     board: {}
@@ -24,7 +24,10 @@ const store = new Vuex.Store({
     SET_BOARD (state, board) {
       state.board = board;
     },
-    SET_USER (state, player) {
+    GET_BOARDS (state, boards) {
+      state.boards = boards;
+    },
+    SET_PLAYER (state, player) {
       state.player = player;
     }
   },
@@ -36,8 +39,11 @@ const store = new Vuex.Store({
     setBoard (context, board) {
       context.commit('SET_BOARD', board);
     },
+    getBoards (context, boards) {
+      context.commit('GET_BOARDS', boards);
+    },
     setPlayer (context, player) {
-      context.commit('SET_USER', player);
+      context.commit('SET_PLAYER', player);
     }
   }
 });
