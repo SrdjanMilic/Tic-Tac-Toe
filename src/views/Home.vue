@@ -10,6 +10,7 @@ import CreatePlayer from '@/components/CreatePlayer.vue';
 
 export default {
   name: 'Home',
+
   components: {
     CreatePlayer
   }

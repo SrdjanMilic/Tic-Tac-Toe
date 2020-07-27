@@ -1,14 +1,13 @@
 <template>
   <div class="container">
-    <h1>Create Player</h1>
+    <h2>Create Player</h2>
     <form @submit.prevent="newPlayer" method="post">
       <label for="name">Enter Name</label>
       <br>
       <input type="text" class="form-control" v-model="name" id="name" required name="name" />
       <br>
-      <input type="submit" value='Register' />
+      <button type="submit">Register</button>
     </form>
-    <div>{{ this.$store.state.player }}</div>
   </div>
 </template>
 
@@ -50,9 +49,7 @@ export default {
 </script>
 
 <style scoped>
-
-input[type=submit] {
+button {
   margin-top: 5px;
 }
-
 </style>
