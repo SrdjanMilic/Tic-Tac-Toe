@@ -80,7 +80,7 @@ export default {
 
       socket.on('joined', res => {
         socket.emit(
-          this.setMessage(`${res.player.name} has join the room.`)
+          this.setMessage(`${res.player.name} has join the room.`) // this emit is working
           // setTimeout(() => {
           //   this.message = '';
           // }, 5000)
