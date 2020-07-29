@@ -1,23 +1,12 @@
 <template>
   <div class="container">
     <h2>Play Game</h2>
-    <p>Messages: {{ message }}</p>
-    <div class="board-wrapper">
-      <div class="game-board">
-        <div class="box">130px x 130px</div>
-        <div class="box">130px x 130px</div>
-        <div class="box">130px x 130px</div>
-        <div class="box">130px x 130px</div>
-        <div class="box">130px x 130px</div>
-        <div class="box">130px x 130px</div>
-        <div class="box">130px x 130px</div>
-        <div class="box">130px x 130px</div>
-        <div class="box">130px x 130px</div>
-      </div>
-    </div>
+    <p>Messages: {{ this.$store.state.message }}</p>
+    <Tiles />
     <div class="btn-group">
       <button @click="leaveRoom()">Leave Room</button>
       <button @click="leaveSeat()">Leave Seat</button>
+      <button @click="restartGame()">Restart Game</button>
     </div>
   </div>
 </template>
@@ -25,47 +14,44 @@
 <script>
 import io from 'socket.io-client';
 import { mapState } from 'vuex';
+import Tiles from './Tiles';
 
 export default {
   name: 'PlayGame',
 
+  components: {
+    Tiles
+  },
+
   data () {
     return {
       playerId: this.$store.state.player.id,
-      message: ''
+      playerSeat: this.$store.state.boards.players,
+      socket: io.connect('http://178.128.206.150:7000/?id=' + this.playerId)
     };
   },
 
   computed: {
-    ...mapState(['board'])
+    ...mapState(['board', 'boards', 'boardStatus', 'message'])
   },
 
   methods: {
     leaveRoom () {
-      const socket = io.connect('http://178.128.206.150:7000/?id=' + this.playerId);
-
-      socket.emit(
-        'leave_room', // doesn't return response code
+      this.socket.emit(
+        'leave_room',
         this.board.id,
-        // this.board.id = {},
-        // this.boards.forEach(element => {
-        //   if (element.id === this.board.id && element.players > 0) {
-        //     element.players--;
-        //   }
-        // }),
-        console.log('Leave room'),
         responseCode => {
-          console.log(`Ack: ${responseCode}`);
-        },
-        this.setBoard({})
+          console.log(`Leave Room Ack: ${responseCode}`);
+          this.setBoard({}); // set board to be empty
+        }
       );
 
-      socket.on('left', res => {
-        socket.emit(
-          this.message = (`${res.player.name} leave the room.`),
-          setTimeout(() => {
-            this.message = '';
-          }, 5000)
+      this.socket.on('left', res => {
+        this.socket.emit(
+          this.setMessage(`${res.player.name} leave the room.`)
+          // setTimeout(() => {
+          //   this.message = '';
+          // }, 5000)
         );
       });
 
@@ -73,28 +59,38 @@ export default {
     },
 
     leaveSeat () {
-      const socket = io.connect('http://178.128.206.150:7000/?id=' + this.playerId);
-
-      socket.emit(
-        'leave_seat', // doesn't return response code
+      this.socket.emit(
+        'leave_seat',
         this.board.id,
-        // this.boards.forEach(element => {
-        //   if (element.id === this.board.id && element.players === 1) {
-        //     element.players = 0;
-        //   }
-        // }),
         responseCode => {
-          console.log(`Ack: ${responseCode}`);
-        });
-      console.log('Seat left');
+          console.log(`Leave Seat Ack: ${responseCode}`);
+        }
+      );
 
-      socket.on('left', res => {
-        socket.emit(
+      this.socket.on('seat_left', res => {
+        this.socket.emit(
           this.message = (`${res.player.name} left the seat.`),
+          this.setMessage(this.message),
           console.log('Socket emit message')
         );
       });
+    },
+
+    restartGame () {
+      this.setBoardStatus('{ 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 }');
+      console.log('Game restarted');
+
+      this.socket.on('restarted', res => {
+        console.log(`${res} game restarted`); // doesn't get any response
+      });
     }
+  },
+
+  mounted () {
+    // this.setBoardsStatus();
+    console.log('BOARDS ' + JSON.stringify(this.$store.state.boards.id));
+    console.log('BOARD_STATUS ' + JSON.stringify(this.boardStatus));
+    console.log('PLAYER_SEAT ' + this.playerSeat);
   }
 };
 </script>
@@ -102,25 +98,5 @@ export default {
 <style scoped>
 .container {
   margin-top: 20px;
-}
-
-.board-wrapper {
-  display: flex;
-  /* justify-content: center; */
-}
-
-.game-board {
-    display: grid;
-    grid-template-rows: 130px 130px 130px;
-    grid-template-columns: 130px 130px 130px;
-}
-
-.box {
-  background-color: #dddddd;
-  border: 1px solid #b9b9b9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #8b8b8b;
 }
 </style>
