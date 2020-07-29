@@ -52,4 +52,9 @@ export default {
 button {
   margin-top: 5px;
 }
+
+input[type="text"] {
+  height: 30px;
+  border: 1px solid #e4e4e4;
+}
 </style>

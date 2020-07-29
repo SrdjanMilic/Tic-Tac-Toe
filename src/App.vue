@@ -5,6 +5,7 @@
       <div class="nav-links">
         <router-link to="/">Home</router-link>
         <router-link to="boards">Boards</router-link>
+        <router-link to="game">Game</router-link>
       </div>
     </nav>
     <div class="info-box">
@@ -28,9 +29,7 @@ nav,
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: Arial, Helvetica, sans-serif;
   color: #2c3e50;
 }
 
@@ -45,8 +44,12 @@ button {
   cursor: pointer;
 }
 
-button:first-of-type {
+button {
   margin-right: 10px;
+}
+
+button:last-of-type {
+  margin: 0;
 }
 
 button:hover {
@@ -73,7 +76,11 @@ nav a {
   color: #fff;
 }
 
-.nav-links a:first-of-type {
+.nav-links a {
   margin-right: 10px;
+}
+
+.nav-links a:last-of-type {
+  margin-right: 0;
 }
 </style>
