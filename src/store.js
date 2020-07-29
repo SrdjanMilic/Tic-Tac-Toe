@@ -14,7 +14,9 @@ const store = new Vuex.Store({
     apiKey: 'e6266ac3-8a38-4f06-a49d-6a189e84648c', // set to null for dynamic creation
     player: [{ id: null, name: null }],
     boards: [],
-    board: {}
+    board: {},
+    boardStatus: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 },
+    message: ''
   },
 
   mutations: {
@@ -29,6 +31,12 @@ const store = new Vuex.Store({
     },
     SET_PLAYER (state, player) {
       state.player = player;
+    },
+    SET_BOARD_STATUS (state, boardStatus) {
+      state.boardStatus = boardStatus;
+    },
+    SET_MESSAGE (state, message) {
+      state.message = message;
     }
   },
 
@@ -44,6 +52,12 @@ const store = new Vuex.Store({
     },
     setPlayer (context, player) {
       context.commit('SET_PLAYER', player);
+    },
+    setBoardStatus (context, boardStatus) {
+      context.commit('SET_BOARD_STATUS', boardStatus);
+    },
+    setMessage (context, message) {
+      context.commit('SET_MESSAGE', message);
     }
   }
 });
