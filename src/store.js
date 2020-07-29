@@ -34,6 +34,11 @@ const store = new Vuex.Store({
     },
     SET_BOARD_STATUS (state, boardStatus) {
       state.boardStatus = boardStatus;
+      // if (!boardStatus) return;
+      // const obj = JSON.parse(boardStatus);
+      // for (const [key, value] of Object.entries(obj)) {
+      //   Vue.set(state.boardStatus, key, value);
+      // }
     },
     SET_MESSAGE (state, message) {
       state.message = message;
