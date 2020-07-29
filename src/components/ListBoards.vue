@@ -1,15 +1,15 @@
 <template>
   <div class="container">
     <h2>Boards</h2>
-    <p>Messages: {{ message }}</p>
+    <p>Messages: {{ this.$store.state.message }}</p>
     <p>Click on board to select it, then click "Join Room" to play the game.</p>
     <div class="boards-wrapper">
       <div class="boards" v-for="board in boards" :key="board.index" @click="setBoardState(board.id)">
       </div>
     </div>
     <div class="btn-group">
-      <button class="btn" @click="joinRoom()">Join Room</button>
-      <button class="btn" @click="createBoard()">Create New</button>
+      <button class="btn" @click="joinRoom">Join Room</button>
+      <button class="btn" @click="createBoard">Create New</button>
     </div>
   </div>
 </template>
@@ -24,14 +24,12 @@ export default {
 
   data () {
     return {
-      playerId: this.$store.state.player.id,
-      message: ''
+      playerId: this.$store.state.player.id
     };
   },
 
   computed: {
-    ...mapState(['board']),
-    ...mapState(['boards'])
+    ...mapState(['board', 'boards', 'message'])
   },
 
   methods: {
@@ -65,7 +63,7 @@ export default {
       this.showBoards();
     },
 
-    setBoardState (id) { // set board as board state
+    setBoardState (id) {
       const boardId = { id: id };
       this.setBoard(boardId);
     },
@@ -77,16 +75,15 @@ export default {
         'join_room',
         this.board.id,
         responseCode => {
-          console.log(`Ack: ${responseCode}`);
-        }
-      );
+          console.log(`Join Room Ack: ${responseCode}`);
+        });
 
       socket.on('joined', res => {
         socket.emit(
-          this.message = (`${res.player.name} has join the room.`),
-          setTimeout(() => {
-            this.message = '';
-          }, 5000)
+          this.setMessage(`${res.player.name} has join the room.`)
+          // setTimeout(() => {
+          //   this.message = '';
+          // }, 5000)
         );
       });
 
