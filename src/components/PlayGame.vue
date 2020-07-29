@@ -59,9 +59,16 @@ export default {
     },
 
     leaveSeat () {
+      let seat = null;
+
+      this.boards.forEach(element => {
+        if (this.board.id === element.id) seat = element.players;
+      });
+
       this.socket.emit(
         'leave_seat',
         this.board.id,
+        seat,
         responseCode => {
           console.log(`Leave Seat Ack: ${responseCode}`);
         }
@@ -69,8 +76,7 @@ export default {
 
       this.socket.on('seat_left', res => {
         this.socket.emit(
-          this.message = (`${res.player.name} left the seat.`),
-          this.setMessage(this.message),
+          this.setMessage(`${res.player.name} left the seat.`),
           console.log('Socket emit message')
         );
       });
@@ -87,10 +93,6 @@ export default {
   },
 
   mounted () {
-    // this.setBoardsStatus();
-    console.log('BOARDS ' + JSON.stringify(this.$store.state.boards.id));
-    console.log('BOARD_STATUS ' + JSON.stringify(this.boardStatus));
-    console.log('PLAYER_SEAT ' + this.playerSeat);
   }
 };
 </script>
